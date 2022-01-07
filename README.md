@@ -18,8 +18,12 @@ $path = 'https://media.example.com/api/?'; // Path to the API part of your Resou
 $private_key = '3eabfbcbea3404b1b5c2f884ec8e86bf686cff53d484f4fb2744530721ff65dzerrs'; // Available at https://media.example.com/pages/api_test.php
 $user = 'rs_user'; // A username in your ResourceSpace Instance
 
+// Create instance of ResourcespaceApi
 $rs = new ResourcespaceApi($private_key, $user, $path);
-$results = $rs->doSearch('Tree')->getResults(); // An array of all files containing the keyword "Tree"
-$results = $rs->searchGetPreviews('Tree', ['getsizes' => 'thm', 'fetchrows' => 50, 'order_by' => 'resourceid', 'sort' => 'desc'])->getResults(); // An array of the 50 first files containing the keyword "Tree", with thumbnail links, sorted by descending resource id.
+
+// An array of all files containing the keyword "Tree"
+$results = $rs->doSearch('Tree')->getResults();
+// An array of the 50 first files containing the keyword "Tree", with thumbnail links, sorted by descending resource id
+$results = $rs->searchGetPreviews('Tree', ['getsizes' => 'thm', 'fetchrows' => 50, 'order_by' => 'resourceid', 'sort' => 'desc'])->getResults(); 
 
 ```
