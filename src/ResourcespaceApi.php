@@ -4,7 +4,7 @@ namespace urban_brussels\resourcespace_api;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 
-class RspaceApi
+class ResourcespaceApi
 {
     private string $private_key;
     private string $user;
