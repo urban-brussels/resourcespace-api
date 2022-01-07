@@ -1,5 +1,5 @@
-# Resourcespace Api
-PHP wrapper for ResourceSpace API (Open Source Digital Asset Management).    
+# Resourcespace API
+PHP wrapper for the API of [ResourceSpace](https://www.resourcespace.com/) (Open Source Digital Asset Management).    
 Method names and attributes based on the RS documentation here: [https://www.resourcespace.com/knowledge-base/api/](https://www.resourcespace.com/knowledge-base/api/)    
 More features coming soon.
 
