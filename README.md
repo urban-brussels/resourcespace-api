@@ -1,6 +1,6 @@
 # Resourcespace Api
 PHP wrapper for ResourceSpace API (Open Source Digital Asset Management).    
-Based on the RS documentation here: [https://www.resourcespace.com/knowledge-base/api/](https://www.resourcespace.com/knowledge-base/api/)
+Based on the RS documentation here: [https://www.resourcespace.com/knowledge-base/api/](https://www.resourcespace.com/knowledge-base/api/)    
 More features coming soon.
 
 ## Installation
