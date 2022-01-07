@@ -20,6 +20,6 @@ $user = 'rs_user'; // A username in your ResourceSpace Instance
 
 $rs = new ResourcespaceApi($private_key, $user, $path);
 $results = $rs->doSearch('Tree')->getResults(); // An array of all files containing the keyword "Tree"
-$results = $rs->searchGetPreviews('Tree', ['getsizes' => 'thm', 'fetchrows' => 50])->getResults(); // An array of the 50 first files containing the keyword "Tree", with thumbnail links
+$results = $rs->searchGetPreviews('Tree', ['getsizes' => 'thm', 'fetchrows' => 50, 'order_by' => 'resourceid', 'sort' => 'desc'])->getResults(); // An array of the 50 first files containing the keyword "Tree", with thumbnail links, sorted by descending resource id.
 
 ```
