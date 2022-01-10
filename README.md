@@ -12,7 +12,7 @@ composer require urban-brussels/resourcespace-api
 ## Usage
 
 ```php 
-use UrbanBrussels\ResourceSpaceApi\ResourceSpace;
+use UrbanBrussels\ResourcespaceApi\ResourceSpace;
 
 $path = 'https://media.example.com/api/?'; // Path to the API part of your ResourceSpace instance
 $user = 'rs_user'; // A username in your ResourceSpace Instance
