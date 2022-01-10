@@ -6,20 +6,20 @@ use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 
 class ResourceSpace
 {
-    private string $private_key;
-    private string $user;
     private string $path;
-    private string $query_url;
+    private string $user;
+    private string $private_key;
     private array $access_parameters;
+    private string $query_url;
     private string $function;
     private string $search;
     private array $search_parameters;
 
-    public function __construct(string $private_key, string $user, string $path, array $access_parameters = [])
+    public function __construct(string $path, string $user, string $private_key, array $access_parameters = [])
     {
-        $this->private_key = $private_key;
-        $this->user = $user;
         $this->path = $path;
+        $this->user = $user;
+        $this->private_key = $private_key;
         $this->access_parameters = $access_parameters;
     }
 
