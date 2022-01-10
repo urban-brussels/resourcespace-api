@@ -1,6 +1,7 @@
 {
     "name": "urban-brussels/resourcespace-api",
     "description": "PHP wrapper for ResourceSpace API (Open Source Digital Asset Management)",
+    "homepage": "https://github.com/urban-brussels/resourcespace-api",
     "keywords": ["ResourceSpace","Digital Asset Management","API","PHP"],
     "require": {
         "php": "^8.0",
@@ -9,7 +10,7 @@
     "license": "MIT",
     "autoload": {
         "psr-4": {
-            "urban_brussels\\resourcespace_api\\": "src/"
+            "UrbanBrussels\\ResourcespaceApi\\": "src/"
         }
     }
 }
