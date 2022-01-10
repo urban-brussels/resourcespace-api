@@ -15,11 +15,11 @@ composer require urban-brussels/resourcespace-api
 use UrbanBrussels\ResourceSpaceApi\ResourceSpace;
 
 $path = 'https://media.example.com/api/?'; // Path to the API part of your ResourceSpace instance
-$private_key = '3eabfbcbea3404b1b5c2f884ec8e86bf686cff53d484f4fb2744530721ff65dzerrs'; // Available at https://media.example.com/pages/api_test.php
 $user = 'rs_user'; // A username in your ResourceSpace Instance
+$private_key = '3eabfbcbea3404b1b5c2f884ec8e86bf686cff53d484f4fb2744530721ff65dzerrs'; // Available at https://media.example.com/pages/api_test.php
 
 // Create instance of ResourcespaceApi
-$rs = new ResourcespaceApi($private_key, $user, $path);
+$rs = new ResourceSpace($path, $user, $private_key);
 
 // An array of all files containing the keyword "Tree"
 $results = $rs->doSearch('Tree')->getResults();
