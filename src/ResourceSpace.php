@@ -1,5 +1,5 @@
 <?php
-namespace UrbanBrussels\ResourceSpaceApi;
+namespace UrbanBrussels\ResourcespaceApi;
 
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
