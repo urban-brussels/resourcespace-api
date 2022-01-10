@@ -12,7 +12,7 @@ composer require urban-brussels/resourcespace-api
 ## Usage
 
 ```php 
-use urban_brussels\resourcespace_api\ResourcespaceApi;
+use UrbanBrussels\ResourceSpaceApi\ResourceSpace;
 
 $path = 'https://media.example.com/api/?'; // Path to the API part of your ResourceSpace instance
 $private_key = '3eabfbcbea3404b1b5c2f884ec8e86bf686cff53d484f4fb2744530721ff65dzerrs'; // Available at https://media.example.com/pages/api_test.php
