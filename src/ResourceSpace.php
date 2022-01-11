@@ -12,8 +12,10 @@ class ResourceSpace
     private array $access_parameters;
     private string $query_url;
     private string $function;
-    private string $search;
+    private ?string $search;
     private array $search_parameters;
+    private int $resource;
+    private string|int $ref;
 
     public function __construct(string $path, string $user, string $private_key, array $access_parameters = [])
     {
@@ -31,14 +33,15 @@ class ResourceSpace
         $httpClient = HttpClient::create();
 
         try {
-                $response = $httpClient->request('GET', $this->path.$this->getQueryUrl().'&sign='.$this->getSign(), $this->access_parameters);
-                $statusCode = $response->getStatusCode();
+            $response = $httpClient->request('GET', $this->path.$this->getQueryUrl().'&sign='.$this->getSign(), $this->access_parameters);
+            $statusCode = $response->getStatusCode();
+
 
             if ($statusCode !== 200) {
                 return null;
             }
 
-            return json_decode($response->getContent(), false);
+            return json_decode($response->getContent(), true);
 
         } catch (TransportExceptionInterface) {
             return null;
@@ -52,20 +55,27 @@ class ResourceSpace
             'function' => $this->function,
         );
 
-        if ($this->search) {
+        if (isset($this->search)) {
             $fields['search'] = $this->search;
         }
 
-        if ($this->search_parameters) {
+        if (isset($this->search_parameters)) {
             foreach ($this->search_parameters as $k => $v) {
                 $fields[$k] = $v;
             }
-            $fields['search'] = $this->search;
+        }
+
+        if (isset($this->resource)) {
+            $fields['resource'] = $this->resource;
+        }
+
+        if (isset($this->ref)) {
+            $fields['ref'] = $this->ref;
         }
 
         return $fields;
     }
-    
+
     public function doSearch(string $search, array $search_parameters = []): self {
         $this->function = 'do_search';
         $this->search = $search;
@@ -77,6 +87,38 @@ class ResourceSpace
         $this->function = 'search_get_previews';
         $this->search = $search;
         $this->search_parameters = $search_parameters;
+        return $this;
+    }
+
+    public function getUserCollections(): self {
+        $this->function = 'get_user_collections';
+        return $this;
+    }
+
+    public function getResourceFieldData(int $resource): self
+    {
+        $this->function = 'get_resource_field_data';
+        $this->resource = $resource;
+        return $this;
+    }
+
+    public function searchPublicCollections(?string $search, array $search_parameters = []): self
+    {
+        $this->function = 'search_public_collections';
+        return $this;
+    }
+
+    public function getCollection(int $ref): self
+    {
+        $this->function = 'get_collection';
+        $this->collectionId = $ref;
+        return $this;
+    }
+
+    public function getFieldOptions(string|int $ref, array $search_parameters = []): self
+    {
+        $this->function = 'get_field_options';
+        $this->ref = $ref;
         return $this;
     }
 
