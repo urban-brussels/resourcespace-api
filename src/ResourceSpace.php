@@ -46,7 +46,7 @@ class ResourceSpace
         }
 
         foreach ($results as $result) {
-            $list[] = new Resource($result['ref'], $result);
+            $list[] = new Resource($result);
         }
 
         $this->results = $list;
