@@ -6,7 +6,7 @@ use DateTime;
 
 class Resource
 {
-    public int $resource;
+    public int $ref;
     private array $attributes_array;
     public DateTime $creation_date;
     public DateTime $modification_date;
@@ -18,6 +18,7 @@ class Resource
     {
         $this->attributes_array = $attributes_array;
 
+        $this->ref = $this->setRef();
         $this->creation_date = $this->setCreationDate();
         $this->file_extension = $this->setFileExtension();
         $this->file_size = $this->setFileSize();
@@ -37,7 +38,7 @@ class Resource
         return DateTime::createFromFormat('Y-m-d H:i:s', $date);
     }
 
-    private function setResource(): int
+    private function setRef(): int
     {
         return $this->attributes_array['ref'];
     }
