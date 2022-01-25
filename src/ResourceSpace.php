@@ -89,7 +89,7 @@ class ResourceSpace
         return $this;
     }
 
-    public function searchGetPreviews(string $search, array $search_parameters = ['getsizes' => 'col, thm, scr, pre', 'fetchrows' => 50]): self {
+    public function searchGetPreviews(string $search, array $search_parameters = ['getsizes' => 'col,thm,scr,pre', 'fetchrows' => 50]): self {
         $this->function = 'search_get_previews';
         $this->search = $search;
         $this->search_parameters = $search_parameters;
