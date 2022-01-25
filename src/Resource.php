@@ -53,8 +53,18 @@ class Resource
         return $this->attributes_array['file_size'];
     }
 
-    private function setUrlThumbnail(): string
+    private function setUrlPreviews(): array
     {
-        return $this->attributes_array['url_thm'];
+        $previews = [];
+
+        foreach ($this->attributes_array as $attribute => $value)
+        {
+            if(str_contains($attribute, 'url_')) {
+                $name = str_replace('url_', '', $attribute);
+                $previews[$name] = $value;
+            }
+        }
+
+        return $previews;
     }
 }
