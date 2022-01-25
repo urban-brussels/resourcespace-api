@@ -14,7 +14,7 @@ class Resource
     public int $file_size;
     public array $previews;
 
-    public function __construct(array $attributes_array = [])
+    public function __construct(Connexion $connexion, int $ref, bool $details = true, array $attributes_array = [])
     {
         $this->attributes_array = $attributes_array;
 

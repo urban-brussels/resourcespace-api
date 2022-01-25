@@ -17,13 +17,11 @@ class ResourceSpace
     private int $resource;
     private string|int $ref;
     private array $results;
+    private Connexion $connexion;
 
-    public function __construct(string $path, string $user, string $private_key, array $access_parameters = [])
+    public function __construct(Connexion $connexion)
     {
-        $this->path = $path;
-        $this->user = $user;
-        $this->private_key = $private_key;
-        $this->access_parameters = $access_parameters;
+        $this->connexion = $connexion;
     }
 
     public function getResults(): self
@@ -32,7 +30,11 @@ class ResourceSpace
         $httpClient = HttpClient::create();
 
         try {
-            $response = $httpClient->request('GET', $this->path.$this->getQueryUrl().'&sign='.$this->getSign(), $this->access_parameters);
+            $response = $httpClient->request(
+                'GET',
+                $this->connexion->getPath().$this->getQueryUrl().'&sign='.$this->connexion->getSign(),
+                $this->connexion->getAccessParameters()
+            );
             $statusCode = $response->getStatusCode();
 
             if ($statusCode !== 200) {
@@ -46,7 +48,7 @@ class ResourceSpace
         }
 
         foreach ($results as $result) {
-            $list[] = new Resource($result);
+            $list[] = new Resource($this->connexion, $result['ref'], true, $result);
         }
 
         $this->results = $list;
@@ -57,7 +59,7 @@ class ResourceSpace
     public function getQueryFields(): array
     {
         $fields = array(
-            'user' => $this->user,
+            'user' => $this->connexion->getUser(),
             'function' => $this->function,
         );
 
@@ -135,7 +137,7 @@ class ResourceSpace
 
     private function getSign(): string
     {
-        return hash("sha256",$this->private_key . $this->getQueryUrl());
+        return hash("sha256",$this->connexion->getPrivateKey() . $this->getQueryUrl());
     }
 
 }
