@@ -32,7 +32,7 @@ class ResourceSpace
         try {
             $response = $httpClient->request(
                 'GET',
-                $this->connexion->getPath().$this->getQueryUrl().'&sign='.$this->connexion->getSign(),
+                $this->connexion->getPath().$this->getQueryUrl().'&sign='.$this->connexion->getSign($this->getQueryUrl()),
                 $this->connexion->getAccessParameters()
             );
             $statusCode = $response->getStatusCode();
@@ -134,10 +134,4 @@ class ResourceSpace
     {
         return http_build_query($this->getQueryFields());
     }
-
-    private function getSign(): string
-    {
-        return hash("sha256",$this->connexion->getPrivateKey() . $this->getQueryUrl());
-    }
-
 }
