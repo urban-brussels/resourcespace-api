@@ -16,6 +16,7 @@ class ResourceSpace
     private array $search_parameters;
     private int $resource;
     private string|int $ref;
+    private array $results;
 
     public function __construct(string $path, string $user, string $private_key, array $access_parameters = [])
     {
@@ -25,27 +26,32 @@ class ResourceSpace
         $this->access_parameters = $access_parameters;
     }
 
-    /**
-     * @return \stdClass|null
-     */
-    public function getResults(): ?array
+    public function getResults(): self
     {
+        $list = [];
         $httpClient = HttpClient::create();
 
         try {
             $response = $httpClient->request('GET', $this->path.$this->getQueryUrl().'&sign='.$this->getSign(), $this->access_parameters);
             $statusCode = $response->getStatusCode();
 
-
             if ($statusCode !== 200) {
-                return null;
+                return $this;
             }
 
-            return json_decode($response->getContent(), true);
+            $results = json_decode($response->getContent(), true);
 
         } catch (TransportExceptionInterface) {
-            return null;
+            return $this;
         }
+
+        foreach ($results as $result) {
+            $list[] = new Resource($result['ref'], $result);
+        }
+
+        $this->results = $list;
+
+        return $this;
     }
 
     public function getQueryFields(): array
