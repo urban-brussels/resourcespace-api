@@ -12,7 +12,7 @@ class Resource
     public DateTime $modification_date;
     public string $file_extension;
     public int $file_size;
-    public string $url_thumbnail;
+    public array $previews;
 
     public function __construct(array $attributes_array = [])
     {
@@ -23,7 +23,7 @@ class Resource
         $this->file_extension = $this->setFileExtension();
         $this->file_size = $this->setFileSize();
         $this->modification_date = $this->setModificationDate();
-        $this->url_thumbnail = $this->setUrlThumbnail();
+        $this->previews = $this->setPreviews();
     }
 
     private function setCreationDate(): DateTime
@@ -53,7 +53,7 @@ class Resource
         return $this->attributes_array['file_size'];
     }
 
-    private function setUrlPreviews(): array
+    private function setPreviews(): array
     {
         $previews = [];
 
