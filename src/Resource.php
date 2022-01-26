@@ -115,6 +115,6 @@ class Resource
 
     private function setChecksum(): string
     {
-        return $this->attributes_array['checksum'];
+        return $this->attributes_array['file_checksum'];
     }
 }
