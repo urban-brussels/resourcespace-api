@@ -3,6 +3,8 @@
 namespace UrbanBrussels\ResourcespaceApi;
 
 use DateTime;
+use Symfony\Component\HttpClient\HttpClient;
+use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 
 class Resource
 {
@@ -13,17 +15,51 @@ class Resource
     public string $file_extension;
     public int $file_size;
     public array $previews;
+    public Connexion $connexion;
 
-    public function __construct(Connexion $connexion, int $ref, bool $details = true, array $attributes_array = [])
+    public function __construct(Connexion $connexion, int $ref)
     {
-        $this->attributes_array = $attributes_array;
-
+        $this->connexion = $connexion;
         $this->ref = $this->setRef();
+        $this->attributes_array = [];
+        $this->getData('get_resource_data');
+
         $this->creation_date = $this->setCreationDate();
         $this->file_extension = $this->setFileExtension();
-        $this->file_size = $this->setFileSize();
+//        $this->file_size = $this->setFileSize();
         $this->modification_date = $this->setModificationDate();
-        $this->previews = $this->setPreviews();
+//        $this->previews = $this->setPreviews();
+
+    }
+
+
+    private function getData(string $function): self
+    {
+        $httpClient = HttpClient::create();
+
+        $query_url = "user=" . $this->connexion->getUser() . "&function=".$function."&resource=".$this->ref;
+
+        try {
+            $response = $httpClient->request(
+                'GET',
+                $this->connexion->getPath().$query_url.'&sign='.$this->connexion->getSign($query_url),
+                $this->connexion->getAccessParameters()
+            );
+            $statusCode = $response->getStatusCode();
+
+            if ($statusCode !== 200) {
+                return $this;
+            }
+
+            $attributes = json_decode($response->getContent(), true);
+
+        } catch (TransportExceptionInterface) {
+            return $this;
+        }
+
+            $this->attributes_array = array_merge($this->attributes_array, $attributes);
+
+        return $this;
     }
 
     private function setCreationDate(): DateTime
