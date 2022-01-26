@@ -48,7 +48,7 @@ class ListResources
         }
 
         foreach ($results as $result) {
-            $list[] = new Resource($this->connexion, $result['ref']);
+            $list[] = new Resource($this->connexion, $result['ref'], $result);
         }
 
         $this->results = $list;

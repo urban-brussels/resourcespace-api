@@ -9,7 +9,7 @@ use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 class Resource
 {
     public int $ref;
-    private array $attributes_array;
+    private array $attributes;
     public DateTime $creation_date;
     public DateTime $modification_date;
     public string $file_extension;
@@ -19,19 +19,19 @@ class Resource
     public array $coord;
     public string $checksum;
 
-    public function __construct(Connexion $connexion, int $ref)
+    public function __construct(Connexion $connexion, int $ref, array $attributes = [])
     {
         $this->connexion = $connexion;
         $this->ref = $ref;
-        $this->attributes_array = [];
-        $this->getData('get_resource_data');
+        $this->attributes = $attributes;
+//        $this->getData('get_resource_data');
 
         $this->creation_date = $this->setCreationDate();
         $this->file_extension = $this->setFileExtension();
-//        $this->file_size = $this->setFileSize();
+        $this->file_size = $this->setFileSize();
         $this->modification_date = $this->setModificationDate();
-        $this->coord = $this->setCoord();
-//        $this->previews = $this->setPreviews();
+//        $this->coord = $this->setCoord();
+        $this->previews = $this->setPreviews();
         $this->checksum = $this->setChecksum();
 
     }
@@ -61,43 +61,43 @@ class Resource
             return $this;
         }
 
-            $this->attributes_array = array_merge($this->attributes_array, $attributes);
+            $this->attributes = array_merge($this->attributes, $attributes);
 
         return $this;
     }
 
     private function setCreationDate(): DateTime
     {
-        $date = $this->attributes_array['creation_date'];
+        $date = $this->attributes['creation_date'];
         return DateTime::createFromFormat('Y-m-d H:i:s', $date);
     }
 
     private function setModificationDate(): DateTime
     {
-        $date = $this->attributes_array['modified'];
+        $date = $this->attributes['modified'];
         return DateTime::createFromFormat('Y-m-d H:i:s', $date);
     }
 
     private function setRef(): int
     {
-        return $this->attributes_array['ref'];
+        return $this->attributes['ref'];
     }
 
     private function setFileExtension(): string
     {
-        return $this->attributes_array['file_extension'];
+        return $this->attributes['file_extension'];
     }
 
     private function setFileSize(): int
     {
-        return $this->attributes_array['file_size'];
+        return $this->attributes['file_size'];
     }
 
     private function setPreviews(): array
     {
         $previews = [];
 
-        foreach ($this->attributes_array as $attribute => $value)
+        foreach ($this->attributes as $attribute => $value)
         {
             if(str_contains($attribute, 'url_')) {
                 $name = str_replace('url_', '', $attribute);
@@ -110,11 +110,11 @@ class Resource
 
     private function setCoord(): array
     {
-        return [$this->attributes_array['geo_lat'], $this->attributes_array['geo_long']];
+        return [$this->attributes['geo_lat'], $this->attributes['geo_long']];
     }
 
     private function setChecksum(): string
     {
-        return $this->attributes_array['file_checksum'];
+        return $this->attributes['file_checksum'];
     }
 }
