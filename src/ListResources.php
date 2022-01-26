@@ -4,7 +4,7 @@ namespace UrbanBrussels\ResourcespaceApi;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 
-class ResourceSpace
+class ListResources
 {
     private string $path;
     private string $user;
@@ -48,7 +48,7 @@ class ResourceSpace
         }
 
         foreach ($results as $result) {
-            $list[] = new Resource($this->connexion, $result['ref'], true, $result);
+            $list[] = new Resource($this->connexion, $result['ref']);
         }
 
         $this->results = $list;

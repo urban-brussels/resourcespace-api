@@ -17,6 +17,7 @@ class Resource
     public array $previews;
     private Connexion $connexion;
     public array $coord;
+    public string $checksum;
 
     public function __construct(Connexion $connexion, int $ref)
     {
@@ -31,6 +32,7 @@ class Resource
         $this->modification_date = $this->setModificationDate();
         $this->coord = $this->setCoord();
 //        $this->previews = $this->setPreviews();
+        $this->checksum = $this->setChecksum();
 
     }
 
@@ -106,9 +108,13 @@ class Resource
         return $previews;
     }
 
-
     private function setCoord(): array
     {
         return [$this->attributes_array['geo_lat'], $this->attributes_array['geo_long']];
+    }
+
+    private function setChecksum(): string
+    {
+        return $this->attributes_array['checksum'];
     }
 }
