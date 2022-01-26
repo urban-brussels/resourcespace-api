@@ -15,7 +15,8 @@ class Resource
     public string $file_extension;
     public int $file_size;
     public array $previews;
-    public Connexion $connexion;
+    private Connexion $connexion;
+    public array $coord;
 
     public function __construct(Connexion $connexion, int $ref)
     {
@@ -28,6 +29,7 @@ class Resource
         $this->file_extension = $this->setFileExtension();
 //        $this->file_size = $this->setFileSize();
         $this->modification_date = $this->setModificationDate();
+        $this->coord = $this->setCoord();
 //        $this->previews = $this->setPreviews();
 
     }
@@ -102,5 +104,11 @@ class Resource
         }
 
         return $previews;
+    }
+
+
+    private function setCoord(): array
+    {
+        return [$this->attributes_array['geo_lat'], $this->attributes_array['geo_long']];
     }
 }
