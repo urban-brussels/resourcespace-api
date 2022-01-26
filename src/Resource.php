@@ -20,7 +20,7 @@ class Resource
     public function __construct(Connexion $connexion, int $ref)
     {
         $this->connexion = $connexion;
-        $this->ref = $this->setRef();
+        $this->ref = $ref;
         $this->attributes_array = [];
         $this->getData('get_resource_data');
 
