@@ -24,7 +24,6 @@ class Resource
         $this->connexion = $connexion;
         $this->ref = $ref;
         $this->attributes = $attributes;
-//        $this->getData('get_resource_data');
 
         $this->creation_date = $this->setCreationDate();
         $this->file_extension = $this->setFileExtension();
@@ -63,6 +62,12 @@ class Resource
 
             $this->attributes = array_merge($this->attributes, $attributes);
 
+        return $this;
+    }
+
+    public function setFieldData(): self
+    {
+        $this->getData('get_resource_field_data');
         return $this;
     }
 
