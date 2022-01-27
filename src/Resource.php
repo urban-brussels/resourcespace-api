@@ -46,12 +46,12 @@ class Resource
     {
         $httpClient = HttpClient::create();
 
-        $query_url = "user=" . $this->connexion->getUser() . "&function=".$function."&resource=".$this->ref;
+        $query_url = "user=" . $this->connexion->getUser() . "&function=".$function."&resource=".$this->ref.(isset($this->language) ? '&language='.$this->language : '');
 
         try {
             $response = $httpClient->request(
                 'GET',
-                $this->connexion->getPath().$query_url.'&sign='.$this->connexion->getSign($query_url).(isset($this->language) ? '&language='.$this->language : ''),
+                $this->connexion->getPath().$query_url.'&sign='.$this->connexion->getSign($query_url),
                 $this->connexion->getAccessParameters()
             );
             $statusCode = $response->getStatusCode();

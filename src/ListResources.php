@@ -34,7 +34,7 @@ class ListResources
         try {
             $response = $httpClient->request(
                 'GET',
-                $this->connexion->getPath().$this->getQueryUrl().'&sign='.$this->connexion->getSign($this->getQueryUrl()).(isset($this->language) ? '&language='.$this->language : ''),
+                $this->connexion->getPath().$this->getQueryUrl().'&sign='.$this->connexion->getSign($this->getQueryUrl()),
                 $this->connexion->getAccessParameters()
             );
             $statusCode = $response->getStatusCode();
@@ -134,6 +134,6 @@ class ListResources
 
     public function getQueryUrl(): string
     {
-        return http_build_query($this->getQueryFields());
+        return http_build_query($this->getQueryFields()).(isset($this->language) ? '&language='.$this->language : '');
     }
 }
