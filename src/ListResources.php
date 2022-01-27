@@ -56,7 +56,7 @@ class ListResources
 
         foreach ($results as $result) {
             $res = new Resource($this->connexion, $result['ref'], $this->language, $result);
-            if ($this->details) {
+            if ($this->details === true) {
                 $res->setFieldData();
             }
             $list[] = $res;
