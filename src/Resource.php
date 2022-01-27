@@ -25,6 +25,10 @@ class Resource
         $this->ref = $ref;
         $this->attributes = $attributes;
 
+        if(empty($this->attributes)) {
+            $this->attributes = $this->getData('get_resource_data');
+        }
+
         $this->creation_date = $this->setCreationDate();
         $this->file_extension = $this->setFileExtension();
         $this->file_size = $this->setFileSize();
@@ -36,7 +40,7 @@ class Resource
     }
 
 
-    private function getData(string $function): self
+    private function getData(string $function): array
     {
         $httpClient = HttpClient::create();
 
@@ -51,23 +55,26 @@ class Resource
             $statusCode = $response->getStatusCode();
 
             if ($statusCode !== 200) {
-                return $this;
+                return [];
             }
 
             $attributes = json_decode($response->getContent(), true);
 
         } catch (TransportExceptionInterface) {
-            return $this;
+            return [];
         }
 
-            $this->attributes = array_merge($this->attributes, $attributes);
+            return $attributes;
 
-        return $this;
     }
 
     public function setFieldData(): self
     {
-        $this->getData('get_resource_field_data');
+        $fields = $this->getData('get_resource_field_data');
+
+        foreach($fields as $field) {
+            $this->attributes['name'] = $field['value'];
+        }
         return $this;
     }
 
