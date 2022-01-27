@@ -1,4 +1,5 @@
 <?php
+
 namespace UrbanBrussels\ResourcespaceApi;
 
 use Symfony\Component\HttpClient\HttpClient;
@@ -19,11 +20,13 @@ class ListResources
     private array $results;
     private Connexion $connexion;
     private ?string $language;
+    public bool $details;
 
     public function __construct(Connexion $connexion, ?string $language = null)
     {
         $this->connexion = $connexion;
         $this->language = $language;
+        $this->details = false;
     }
 
     public function getResults(): self
@@ -34,7 +37,9 @@ class ListResources
         try {
             $response = $httpClient->request(
                 'GET',
-                $this->connexion->getPath().$this->getQueryUrl().'&sign='.$this->connexion->getSign($this->getQueryUrl()),
+                $this->connexion->getPath().$this->getQueryUrl().'&sign='.$this->connexion->getSign(
+                    $this->getQueryUrl()
+                ),
                 $this->connexion->getAccessParameters()
             );
             $statusCode = $response->getStatusCode();
@@ -50,7 +55,11 @@ class ListResources
         }
 
         foreach ($results as $result) {
-            $list[] = new Resource($this->connexion, $result['ref'], $this->language, $result);
+            $res = new Resource($this->connexion, $result['ref'], $this->language, $result);
+            if ($this->details) {
+                $res->setFieldData();
+            }
+            $list[] = $res;
         }
 
         $this->results = $list;
@@ -86,22 +95,37 @@ class ListResources
         return $fields;
     }
 
-    public function doSearch(string $search, array $search_parameters = []): self {
+    public function doSearch(string $search, array $search_parameters = []): self
+    {
         $this->function = 'do_search';
         $this->search = $search;
         $this->search_parameters = $search_parameters;
+
         return $this;
     }
 
-    public function searchGetPreviews(string $search, array $search_parameters = ['getsizes' => 'col,thm,scr,pre', 'fetchrows' => 50]): self {
+    public function searchGetPreviews(
+        string $search,
+        array $search_parameters = ['getsizes' => 'col,thm,scr,pre', 'fetchrows' => 50]
+    ): self {
         $this->function = 'search_get_previews';
         $this->search = $search;
         $this->search_parameters = $search_parameters;
+
         return $this;
     }
 
-    public function getUserCollections(): self {
+    public function withDetails(): self
+    {
+        $this->details = true;
+
+        return $this;
+    }
+
+    public function getUserCollections(): self
+    {
         $this->function = 'get_user_collections';
+
         return $this;
     }
 
@@ -109,12 +133,14 @@ class ListResources
     {
         $this->function = 'get_resource_field_data';
         $this->resource = $resource;
+
         return $this;
     }
 
     public function searchPublicCollections(?string $search, array $search_parameters = []): self
     {
         $this->function = 'search_public_collections';
+
         return $this;
     }
 
@@ -122,6 +148,7 @@ class ListResources
     {
         $this->function = 'get_collection';
         $this->collectionId = $ref;
+
         return $this;
     }
 
@@ -129,6 +156,7 @@ class ListResources
     {
         $this->function = 'get_field_options';
         $this->ref = $ref;
+
         return $this;
     }
 
