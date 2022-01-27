@@ -18,12 +18,14 @@ class Resource
     private Connexion $connexion;
     public array $coord;
     public string $checksum;
+    private ?string $language;
 
-    public function __construct(Connexion $connexion, int $ref, array $attributes = [])
+    public function __construct(Connexion $connexion, int $ref, ?string $language = null, array $attributes = [])
     {
         $this->connexion = $connexion;
         $this->ref = $ref;
         $this->attributes = $attributes;
+        $this->language = $language;
 
         if(empty($this->attributes)) {
             $this->attributes = $this->getData('get_resource_data');
@@ -49,7 +51,7 @@ class Resource
         try {
             $response = $httpClient->request(
                 'GET',
-                $this->connexion->getPath().$query_url.'&sign='.$this->connexion->getSign($query_url),
+                $this->connexion->getPath().$query_url.'&sign='.$this->connexion->getSign($query_url).(isset($this->language) ? '&language='.$this->language : ''),
                 $this->connexion->getAccessParameters()
             );
             $statusCode = $response->getStatusCode();

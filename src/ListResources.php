@@ -18,10 +18,12 @@ class ListResources
     private string|int $ref;
     private array $results;
     private Connexion $connexion;
+    private ?string $language;
 
-    public function __construct(Connexion $connexion)
+    public function __construct(Connexion $connexion, ?string $language = null)
     {
         $this->connexion = $connexion;
+        $this->language = $language;
     }
 
     public function getResults(): self
@@ -32,7 +34,7 @@ class ListResources
         try {
             $response = $httpClient->request(
                 'GET',
-                $this->connexion->getPath().$this->getQueryUrl().'&sign='.$this->connexion->getSign($this->getQueryUrl()),
+                $this->connexion->getPath().$this->getQueryUrl().'&sign='.$this->connexion->getSign($this->getQueryUrl()).(isset($this->language) ? '&language='.$this->language : ''),
                 $this->connexion->getAccessParameters()
             );
             $statusCode = $response->getStatusCode();
@@ -48,7 +50,7 @@ class ListResources
         }
 
         foreach ($results as $result) {
-            $list[] = new Resource($this->connexion, $result['ref'], $result);
+            $list[] = new Resource($this->connexion, $result['ref'], $this->language, $result);
         }
 
         $this->results = $list;
