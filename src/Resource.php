@@ -73,8 +73,9 @@ class Resource
         $fields = $this->getData('get_resource_field_data');
 
         foreach($fields as $field) {
-            $this->attributes['name'] = $field['value'];
+            $this->attributes[$field['name']] = $field['value'];
         }
+
         return $this;
     }
 
