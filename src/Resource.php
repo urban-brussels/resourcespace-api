@@ -31,12 +31,16 @@ class Resource
         $this->language = $language;
         $this->ref = $ref;
 
-        if(empty($this->attributes)) {
-            $this->attributes = $this->getData('get_resource_data');
-        }
-
         if ($details === true) {
+            $this->attributes = $this->getData('get_resource_data');
             $this->setFieldData();
+            $this->coord = $this->setCoord();
+        }
+        else {
+            if(empty($this->attributes)) {
+                $this->attributes = $this->getData('get_resource_data');
+                $this->coord = $this->setCoord();
+            }
         }
 
         if(isset($this->attributes['original_filename']) || isset($this->attributes['originalfilename'])) {
@@ -49,7 +53,7 @@ class Resource
         $this->file_extension = $this->setFileExtension();
         $this->file_size = $this->setFileSize();
         $this->modification_date = $this->setModificationDate();
-//        $this->coord = $this->setCoord();
+
         $this->previews = $this->setPreviews();
         $this->checksum = $this->setChecksum();
         $this->created_by = $this->setCreatedBy();
