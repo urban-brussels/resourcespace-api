@@ -31,6 +31,8 @@ class Resource
         $this->language = $language;
         $this->ref = $ref;
 
+        $data_attributes = [];
+
         if ($details === true) {
             $data_attributes = $this->getData('get_resource_data');
             $this->setFieldData();
