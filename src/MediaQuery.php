@@ -53,6 +53,17 @@ class MediaQuery
             $media->setCreationDate(DateTime::createFromFormat('Y-m-d H:i:s', $result['creation_date']));
             $media->setModificationDate(DateTime::createFromFormat('Y-m-d H:i:s', $result['modified']));
             $collection->addMedia($media);
+
+            // Previews
+            $previews = [];
+            foreach ($result as $attribute => $value)
+            {
+                if(str_contains($attribute, 'url_')) {
+                    $name = str_replace('url_', '', $attribute);
+                    $previews[$name] = $value;
+                }
+            }
+            $media->setPreviews($previews);
         }
 
         return $collection;
