@@ -2,6 +2,7 @@
 
 namespace UrbanBrussels\ResourcespaceApi;
 
+use DateTime;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 
@@ -43,7 +44,14 @@ class MediaQuery
         }
 
         foreach ($results as $result) {
-            $media = new Media($result['ref'], $this->language);
+            $media = new Media($result['ref']);
+            $media->setLanguage($this->language);
+            $media->setResourceType($result['resource_type']);
+            $media->setFileSize((int)$result['file_size']);
+            $media->setChecksum($result['file_checksum']);
+            $media->setFileExtension($result['file_extension']);
+            $media->setCreationDate(DateTime::createFromFormat('Y-m-d H:i:s', $result['creation_date']));
+            $media->setModificationDate(DateTime::createFromFormat('Y-m-d H:i:s', $result['modified']));
             $collection->addMedia($media);
         }
 

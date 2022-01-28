@@ -19,10 +19,9 @@ class Media
     public bool $has_image;
     public int $resource_type;
 
-    public function __construct(int $ref, ?string $language = null)
+    public function __construct(int $ref)
     {
         $this->setRef($ref);
-        $this->setLanguage($language);
     }
 
     public function getRef(): int
