@@ -21,11 +21,13 @@ class Resource
     public ?string $language;
     public string $original_filename;
     public int $created_by;
+    public bool $has_image;
+    public int $resource_type;
+    public string $image_color;
 
     public function __construct(Connexion $connexion, int $ref, ?string $language = null, array $attributes = [])
     {
         $this->connexion = $connexion;
-        $this->ref = $ref;
         $this->attributes = $attributes;
         $this->language = $language;
 
@@ -33,6 +35,8 @@ class Resource
             $this->attributes = $this->getData('get_resource_data');
             $this->original_filename = $this->setOriginalFilename();
         }
+
+        $this->ref = $this->setRef();
 
         $this->creation_date = $this->setCreationDate();
         $this->file_extension = $this->setFileExtension();
@@ -42,6 +46,9 @@ class Resource
         $this->previews = $this->setPreviews();
         $this->checksum = $this->setChecksum();
         $this->created_by = $this->setCreatedBy();
+        $this->resource_type = $this->setResourceType();
+        $this->has_image = $this->setHasImage();
+        $this->image_color = $this->setImageColor();
 
 
     }
@@ -164,5 +171,26 @@ class Resource
         $created_by = $this->attributes['created_by'];
         unset($this->attributes['created_by']);
         return $created_by;
+    }
+
+    private function setResourceType(): int
+    {
+        $resource_type = $this->attributes['resource_type'];
+        unset($this->attributes['resource_type']);
+        return $resource_type;
+    }
+
+    private function setHasImage(): bool
+    {
+        $has_image = $this->attributes['has_image'] === "1";
+        unset($this->attributes['has_image']);
+        return $has_image;
+    }
+
+    private function setImageColor(): string
+    {
+        $image_color = sprintf("#%02x%02x%02x", $this->attributes['image_red'], $this->attributes['image_green'], $this->attributes['image_blue']);
+        unset($this->attributes['image_red'], $this->attributes['image_green'], $this->attributes['image_blue']);
+        return $image_color;
     }
 }
