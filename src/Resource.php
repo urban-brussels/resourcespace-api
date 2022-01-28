@@ -29,14 +29,18 @@ class Resource
         $this->connexion = $connexion;
         $this->attributes = $attributes;
         $this->language = $language;
+        $this->ref = $ref;
 
         if(empty($this->attributes)) {
             $this->attributes = $this->getData('get_resource_data');
-            $this->original_filename = $this->setOriginalFilename();
         }
 
         if ($details === true) {
             $this->setFieldData();
+        }
+
+        if(isset($this->attributes['original_filename']) || isset($this->attributes['originalfilename'])) {
+            $this->original_filename = $this->setOriginalFilename();
         }
 
         $this->ref = $this->setRef();
@@ -161,8 +165,8 @@ class Resource
 
     private function setOriginalFilename(): string
     {
-        $original_filename = $this->attributes['original_filename'];
-        unset($this->attributes['original_filename']);
+        $original_filename = $this->attributes['original_filename'] ?? $this->attributes['originalfilename'];
+        unset($this->attributes['original_filename'], $this->attributes['originalfilename']);
         return $original_filename;
     }
 
