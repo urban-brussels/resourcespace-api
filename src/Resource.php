@@ -18,7 +18,9 @@ class Resource
     private Connexion $connexion;
     public array $coord;
     public string $checksum;
-    private ?string $language;
+    public ?string $language;
+    public string $original_filename;
+    public int $created_by;
 
     public function __construct(Connexion $connexion, int $ref, ?string $language = null, array $attributes = [])
     {
@@ -29,6 +31,7 @@ class Resource
 
         if(empty($this->attributes)) {
             $this->attributes = $this->getData('get_resource_data');
+            $this->original_filename = $this->setOriginalFilename();
         }
 
         $this->creation_date = $this->setCreationDate();
@@ -38,6 +41,8 @@ class Resource
 //        $this->coord = $this->setCoord();
         $this->previews = $this->setPreviews();
         $this->checksum = $this->setChecksum();
+        $this->created_by = $this->setCreatedBy();
+
 
     }
 
@@ -84,28 +89,36 @@ class Resource
     private function setCreationDate(): DateTime
     {
         $date = $this->attributes['creation_date'];
+        unset($this->attributes['creation_date']);
         return DateTime::createFromFormat('Y-m-d H:i:s', $date);
     }
 
     private function setModificationDate(): DateTime
     {
         $date = $this->attributes['modified'];
+        unset($this->attributes['modified']);
         return DateTime::createFromFormat('Y-m-d H:i:s', $date);
     }
 
     private function setRef(): int
     {
-        return $this->attributes['ref'];
+        $ref = $this->attributes['ref'];
+        unset($this->attributes['ref']);
+        return $ref;
     }
 
     private function setFileExtension(): string
     {
-        return $this->attributes['file_extension'];
+        $file_extension = $this->attributes['file_extension'];
+        unset($this->attributes['file_extension']);
+        return $file_extension;
     }
 
     private function setFileSize(): int
     {
-        return $this->attributes['file_size'];
+        $file_size = $this->attributes['file_size'];
+        unset($this->attributes['file_size']);
+        return $file_size;
     }
 
     private function setPreviews(): array
@@ -117,6 +130,7 @@ class Resource
             if(str_contains($attribute, 'url_')) {
                 $name = str_replace('url_', '', $attribute);
                 $previews[$name] = $value;
+                unset($this->attributes[$attribute]);
             }
         }
 
@@ -125,11 +139,30 @@ class Resource
 
     private function setCoord(): array
     {
-        return [$this->attributes['geo_lat'], $this->attributes['geo_long']];
+        $coord = [$this->attributes['geo_lat'], $this->attributes['geo_long']];
+        unset($this->attributes['geo_lat'], $this->attributes['geo_long']);
+        return $coord;
     }
 
     private function setChecksum(): string
     {
-        return $this->attributes['file_checksum'];
+        $checksum = $this->attributes['file_checksum'];
+        unset($this->attributes['file_checksum']);
+        return $checksum;
+    }
+
+
+    private function setOriginalFilename(): string
+    {
+        $original_filename = $this->attributes['original_filename'];
+        unset($this->attributes['original_filename']);
+        return $original_filename;
+    }
+
+    private function setCreatedBy(): int
+    {
+        $created_by = $this->attributes['created_by'];
+        unset($this->attributes['created_by']);
+        return $created_by;
     }
 }
