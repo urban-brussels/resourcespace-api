@@ -36,16 +36,15 @@ class Resource
         if ($details === true) {
             $data_attributes = $this->getData('get_resource_data');
             $this->setFieldData();
-            $this->coord = $this->setCoord();
         }
         else {
             if(empty($this->attributes)) {
                 $data_attributes = $this->getData('get_resource_data');
-                $this->coord = $this->setCoord();
             }
         }
 
         $this->attributes = array_merge($this->attributes, $data_attributes);
+        $this->coord = $this->setCoord();
 
         if(isset($this->attributes['original_filename']) || isset($this->attributes['originalfilename'])) {
             $this->original_filename = $this->setOriginalFilename();
@@ -158,9 +157,10 @@ class Resource
 
     private function setCoord(): array
     {
-        $coord = [$this->attributes['geo_lat'], $this->attributes['geo_long']];
-        if($this->attributes['geo_lat'] === "" or $this->attributes['geo_long'] === "") {
+        if(!isset($this->attributes['geo_lat']) || $this->attributes['geo_lat'] === "" || $this->attributes['geo_long'] === "") {
             $coord = [];
+        }
+        else {         $coord = [$this->attributes['geo_lat'], $this->attributes['geo_long']];
         }
         unset($this->attributes['geo_lat'], $this->attributes['geo_long']);
         return $coord;
