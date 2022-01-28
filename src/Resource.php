@@ -155,6 +155,9 @@ class Resource
     private function setCoord(): array
     {
         $coord = [$this->attributes['geo_lat'], $this->attributes['geo_long']];
+        if($this->attributes['geo_lat'] === "" or $this->attributes['geo_long'] === "") {
+            $coord = [];
+        }
         unset($this->attributes['geo_lat'], $this->attributes['geo_long']);
         return $coord;
     }
