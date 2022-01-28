@@ -2,6 +2,8 @@
 
 namespace UrbanBrussels\ResourcespaceApi;
 use DateTime;
+use Symfony\Component\HttpClient\HttpClient;
+use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 
 class Media
 {
@@ -18,6 +20,7 @@ class Media
     public int $created_by;
     public bool $has_image;
     public int $resource_type;
+    private $property;
 
     public function __construct(int $ref)
     {
@@ -152,6 +155,58 @@ class Media
     public function setResourceType(int $resource_type): void
     {
         $this->resource_type = $resource_type;
+    }
+
+
+    protected function addData(string $function, Connexion $connexion, ?string $language = null): self
+    {
+        $httpClient = HttpClient::create();
+        $query_url = "user=" . $connexion->getUser() . "&function=".$function."&resource=".$this->getRef().(!is_null($language) ? '&language='.$language : '');
+
+        try {
+            $response = $httpClient->request(
+                'GET',
+                $connexion->getPath().$query_url.'&sign='.$connexion->getSign($query_url),
+                $connexion->getAccessParameters()
+            );
+            $statusCode = $response->getStatusCode();
+
+            if ($statusCode !== 200) {
+                return [];
+            }
+
+            $fields = json_decode($response->getContent(), true);
+
+        } catch (TransportExceptionInterface) {
+            return [];
+        }
+
+        foreach($fields as $field) {
+            $this->__set($field['name'], $field['value']);
+        }
+
+        return $this;
+
+    }
+
+    public function __set($property, $value)
+    {
+            $this->property= $value;
+    }
+
+    public function __isset($name){
+        $getter = 'get'.ucfirst($name);
+        return method_exists($this, $getter) && !is_null($this->$getter());
+    }
+
+    public function __get($property)
+    {
+        return $this->property;
+    }
+
+    public function addFieldData(Connexion $connexion, ?string $language = null): self {
+        $this->addData('get_resource_field_data', $connexion, $language);
+        return $this;
     }
 
 

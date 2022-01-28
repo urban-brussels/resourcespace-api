@@ -52,7 +52,7 @@ class MediaQuery
             $media->setFileExtension($result['file_extension']);
             $media->setCreationDate(DateTime::createFromFormat('Y-m-d H:i:s', $result['creation_date']));
             $media->setModificationDate(DateTime::createFromFormat('Y-m-d H:i:s', $result['modified']));
-            $collection->addMedia($media);
+            $media->setCreatedBy($result['created_by']);
 
             // Previews
             $previews = [];
@@ -64,6 +64,8 @@ class MediaQuery
                 }
             }
             $media->setPreviews($previews);
+
+            $collection->addMedia($media);
         }
 
         return $collection;
