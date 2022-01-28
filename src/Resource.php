@@ -23,9 +23,8 @@ class Resource
     public int $created_by;
     public bool $has_image;
     public int $resource_type;
-    public string $image_color;
 
-    public function __construct(Connexion $connexion, int $ref, ?string $language = null, array $attributes = [])
+    public function __construct(Connexion $connexion, int $ref, ?string $language = null, bool $details = true, array $attributes = [])
     {
         $this->connexion = $connexion;
         $this->attributes = $attributes;
@@ -34,6 +33,10 @@ class Resource
         if(empty($this->attributes)) {
             $this->attributes = $this->getData('get_resource_data');
             $this->original_filename = $this->setOriginalFilename();
+        }
+
+        if ($details === true) {
+            $this->setFieldData();
         }
 
         $this->ref = $this->setRef();
@@ -48,9 +51,6 @@ class Resource
         $this->created_by = $this->setCreatedBy();
         $this->resource_type = $this->setResourceType();
         $this->has_image = $this->setHasImage();
-        $this->image_color = $this->setImageColor();
-
-
     }
 
 
@@ -185,12 +185,5 @@ class Resource
         $has_image = $this->attributes['has_image'] === "1";
         unset($this->attributes['has_image']);
         return $has_image;
-    }
-
-    private function setImageColor(): string
-    {
-        $image_color = sprintf("#%02x%02x%02x", $this->attributes['image_red'], $this->attributes['image_green'], $this->attributes['image_blue']);
-        unset($this->attributes['image_red'], $this->attributes['image_green'], $this->attributes['image_blue']);
-        return $image_color;
     }
 }
