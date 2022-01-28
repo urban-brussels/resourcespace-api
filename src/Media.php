@@ -158,7 +158,7 @@ class Media
     }
 
 
-    protected function addData(string $function, Connexion $connexion, ?string $language = null): self
+    protected function addData(string $function, Connexion $connexion, ?string $language = null): array
     {
         $httpClient = HttpClient::create();
         $query_url = "user=" . $connexion->getUser() . "&function=".$function."&resource=".$this->getRef().(!is_null($language) ? '&language='.$language : '');
@@ -175,17 +175,14 @@ class Media
                 return [];
             }
 
-            $fields = json_decode($response->getContent(), true);
+            $attributes = json_decode($response->getContent(), true);
 
         } catch (TransportExceptionInterface) {
             return [];
         }
 
-        foreach($fields as $field) {
-            $this->__set($field['name'], $field['value']);
-        }
 
-        return $this;
+        return $attributes;
 
     }
 
@@ -205,7 +202,12 @@ class Media
     }
 
     public function addFieldData(Connexion $connexion, ?string $language = null): self {
-        $this->addData('get_resource_field_data', $connexion, $language);
+        $fields = $this->addData('get_resource_field_data', $connexion, $language);
+
+        foreach($fields as $field) {
+            $this->__set($field['name'], $field['value']);
+        }
+
         return $this;
     }
 
