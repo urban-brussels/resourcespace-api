@@ -32,16 +32,18 @@ class Resource
         $this->ref = $ref;
 
         if ($details === true) {
-            $this->attributes = $this->getData('get_resource_data');
+            $data_attributes = $this->getData('get_resource_data');
             $this->setFieldData();
             $this->coord = $this->setCoord();
         }
         else {
             if(empty($this->attributes)) {
-                $this->attributes = $this->getData('get_resource_data');
+                $data_attributes = $this->getData('get_resource_data');
                 $this->coord = $this->setCoord();
             }
         }
+
+        $this->attributes = array_merge($this->attributes, $data_attributes);
 
         if(isset($this->attributes['original_filename']) || isset($this->attributes['originalfilename'])) {
             $this->original_filename = $this->setOriginalFilename();
