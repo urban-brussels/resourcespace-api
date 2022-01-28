@@ -20,7 +20,6 @@ class Media
     public int $created_by;
     public bool $has_image;
     public int $resource_type;
-    private $property;
 
     public function __construct(int $ref)
     {
@@ -188,7 +187,7 @@ class Media
 
     public function __set($property, $value)
     {
-            $this->property= $value;
+            $this->$property= $value;
     }
 
     public function __isset($name){
@@ -198,7 +197,7 @@ class Media
 
     public function __get($property)
     {
-        return $this->property;
+        return $this->$property;
     }
 
     public function addFieldData(Connexion $connexion, ?string $language = null): self {
