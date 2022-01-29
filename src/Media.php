@@ -204,6 +204,10 @@ class Media
         $fields = $this->addData('get_resource_field_data', $connexion, $language);
 
         foreach($fields as $field) {
+            // Format DateTime for every metadata containing "date"
+            if(str_contains($field['value'], 'date')) {
+                $field['value'] = DateTime::createFromFormat('Y-m-d H:i:s', $field['value']);
+            }
             $this->__set($field['name'], $field['value']);
         }
 

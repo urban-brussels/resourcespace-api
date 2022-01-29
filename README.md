@@ -36,8 +36,8 @@ $list = $query->searchGetPreviews('Tree', ['getsizes' => 'col,thm,scr,pre', 'fet
 // You get a collection of Medias that you can hydrate, adding metadata for example 
 foreach($list->medias as $key => $value) 
 {
-    $list->medias[$key]->addPreviewsData($connexion, 'nl'); // Add previews (already retrieved if you used "searchGetPreviews" but not with "doSearch")
-    $list->medias[$key]->addFieldsData($connexion);
+    $list->medias[$key]->addPreviewsData($connexion); // Add previews (already retrieved if you used "searchGetPreviews" but not with "doSearch")
+    $list->medias[$key]->addFieldsData($connexion, 'fr'); // If you use multiple languages, specify the one you want to get
 }
 
 ```
