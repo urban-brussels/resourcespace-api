@@ -10,6 +10,9 @@ class MediaQuery
 {
     private Connexion $connexion;
     private ?string $language;
+    private array $search_parameters;
+    private string $function;
+    private string $search;
 
     public function __construct(Connexion $connexion, ?string $language = null)
     {
@@ -110,18 +113,11 @@ class MediaQuery
 
     public function searchGetPreviews(
         string $search,
-        array $search_parameters = ['getsizes' => 'col,thm,scr,pre', 'fetchrows' => 50]
+        array $search_parameters = ['getsizes' => 'col,thm,scr,pre']
     ): self {
         $this->function = 'search_get_previews';
         $this->search = $search;
         $this->search_parameters = $search_parameters;
-
-        return $this;
-    }
-
-    public function withDetails(): self
-    {
-        $this->details = true;
 
         return $this;
     }
@@ -133,33 +129,9 @@ class MediaQuery
         return $this;
     }
 
-    public function getResourceFieldData(int $resource): self
-    {
-        $this->function = 'get_resource_field_data';
-        $this->resource = $resource;
-
-        return $this;
-    }
-
     public function searchPublicCollections(?string $search, array $search_parameters = []): self
     {
         $this->function = 'search_public_collections';
-
-        return $this;
-    }
-
-    public function getCollection(int $ref): self
-    {
-        $this->function = 'get_collection';
-        $this->collectionId = $ref;
-
-        return $this;
-    }
-
-    public function getFieldOptions(string|int $ref, array $search_parameters = []): self
-    {
-        $this->function = 'get_field_options';
-        $this->ref = $ref;
 
         return $this;
     }

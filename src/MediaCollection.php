@@ -46,7 +46,7 @@ class MediaCollection implements \Iterator
 
     public function valid(): bool
     {
-        return isset($this->items[$this->position]);
+        return isset($this->medias[$this->position]);
     }
 
     public function rewind(): void

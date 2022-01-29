@@ -200,7 +200,7 @@ class Media
         return $this->$property;
     }
 
-    public function addFieldData(Connexion $connexion, ?string $language = null): self {
+    public function addFieldsData(Connexion $connexion, ?string $language = null): self {
         $fields = $this->addData('get_resource_field_data', $connexion, $language);
 
         foreach($fields as $field) {
@@ -210,5 +210,16 @@ class Media
         return $this;
     }
 
+    public function addPreviewsData(Connexion $connexion): self {
+        $fields = $this->addData('get_resource_all_image_sizes', $connexion);
+        $previews = [];
 
+        foreach($fields as $field) {
+            $previews[$field['size_code']] = $field['url'];
+        }
+
+        $this->setPreviews($previews);
+
+        return $this;
+    }
 }
